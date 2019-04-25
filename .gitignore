@@ -1,4 +1,6 @@
-#IntelliJ IDEA IDEs
+# IntelliJ IDEA IDEs
 .idea
-#local build
+# local build
 build
+#root files for testing
+*.root
