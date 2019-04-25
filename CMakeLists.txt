@@ -21,7 +21,7 @@ message(STATUS "Using REST PATH: " ${REST_PATH})
 # ROOT
 include(FindRoot)
 
-set(lnklib -L${REST_PATH}/lib/ -lRestTools -lRestCore -lRestEvents -lRestMetadata ${ROOT_LIBRARIES} -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
+set(lnklib -L${REST_PATH}/lib/ -lRestTools -lRestCore -lRestEvents -lRestMetadata ${ROOT_LIBRARIES} -lboost_system -lboost_filesystem -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
 
 include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${REST_PATH}/include)
