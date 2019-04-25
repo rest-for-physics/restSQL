@@ -1,29 +1,37 @@
-#include "TRestSql.h"
+//#include "TRestSql.h"
 
-#include <TKey.h>
 #include <TFile.h>
+#include <TKey.h>
+#include <TRestG4Metadata.h>
+#include <TRestMetadata.h>
+
+#include <assert.h>
 #include <iostream>
 
 int main() {
-  TRestSQL *restSql = new TRestSQL();
+  TRestTools::LoadRESTLibrary();
 
-  std::cout << "test variable: " << restSql->x << std::endl;
-
-  TString rootFile(
+  TString root_file(
       "/home/lobis/Desktop/gifna-gitlab/restsql/"
       "Run_simulation_1e6-5keV_NeutronsFromGas_TestCalib_Neon_Version_2.root");
 
-  TFile *f = new TFile(rootFile);
+  TFile *f = new TFile(root_file);
 
-  for(const auto& obj: *f->GetListOfKeys())
-  {
-    TKey* key = (TKey*)obj;
-    cout << key->GetClassName() << std::endl;
+  // TRestMetadata *restG4_metadata = restSql->GetTRestG4MetadataFromFile(f);
+
+  for (const auto &obj : *f->GetListOfKeys()) {
+    TKey *key = (TKey *)obj;
+    string key_class_name = key->GetClassName();
+
+    if (key_class_name == "TRestG4Metadata") {
+      TRestMetadata *key_metadata = (TRestMetadata *)f->Get(key->GetName());
+      assert(key_metadata->InheritsFrom("TRestMetadata"));
+      cout << "REST version used: " << key_metadata->GetVersion() << std::endl;
+    }
+    cout << key_class_name << " - " << key->GetName() << std::endl;
   }
 
   f->Close();
-
-  restSql->PrintMetadata();
 
   return 0;
 }

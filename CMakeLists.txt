@@ -27,5 +27,6 @@ include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${REST_PATH}/include)
 
 
-add_executable(restSQL restSQL.cpp)
+add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
+
 target_link_libraries(restSQL ${lnklib})
