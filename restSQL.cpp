@@ -6,18 +6,24 @@
 #include <TRestMetadata.h>
 
 #include <assert.h>
+#include <boost/filesystem.hpp>
 #include <iostream>
 
 int main() {
-  TRestTools::LoadRESTLibrary();
 
-  TString root_file(
+  string root_file_path(
       "/home/lobis/Desktop/gifna-gitlab/restsql/"
       "Run_simulation_1e6-5keV_NeutronsFromGas_TestCalib_Neon_Version_2.root");
 
-  TFile *f = new TFile(root_file);
+  root_file_path = boost::filesystem::canonical(root_file_path).string();
+  // above step checks if file exists and also normalizes the format, for
+  // example removes double "//"
 
-  // TRestMetadata *restG4_metadata = restSql->GetTRestG4MetadataFromFile(f);
+  cout << root_file_path << std::endl;
+
+  TRestTools::LoadRESTLibrary();
+
+  TFile *f = new TFile((TString)root_file_path);
 
   for (const auto &obj : *f->GetListOfKeys()) {
     TKey *key = (TKey *)obj;
