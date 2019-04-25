@@ -7,17 +7,43 @@
 
 #include <assert.h>
 #include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 #include <iostream>
 
-int main() {
+namespace po = boost::program_options;
 
-  string root_file_path(
-      "/home/lobis/Desktop/gifna-gitlab/restsql/"
-      "Run_simulation_1e6-5keV_NeutronsFromGas_TestCalib_Neon_Version_2.root");
+int main(int argc, const char *argv[]) {
+  string root_file_path;
+  // using boost/program_options to perform argument parsing
+  try {
+    po::options_description desc{"Options"};
+    desc.add_options()("help,h", "Help screen")(
+        "file,f", po::value<string>(&root_file_path),
+        "Input ROOT file (REQUIRED)");
+
+    po::variables_map vm;
+    store(parse_command_line(argc, argv, desc), vm);
+    notify(vm);
+
+    if (vm.count("help") || (argc <= 1)) {
+      std::cout << desc << '\n';
+      return 0;
+    } else if (vm.count("file")) {
+      // we continue with normal execution
+      root_file_path = vm["file"].as<string>();
+    } else {
+      std::cout << desc << '\n';
+      return 0;
+    }
+
+  } catch (const po::error &ex) {
+    std::cerr << ex.what() << '\n';
+    return 0;
+  }
 
   root_file_path = boost::filesystem::canonical(root_file_path).string();
-  // above step checks if file exists and also normalizes the format, for
-  // example removes double "//"
+  // above step checks if file exists and returns the absolute path normalized,
+  // for example removes double "//" if present
 
   cout << root_file_path << std::endl;
 
