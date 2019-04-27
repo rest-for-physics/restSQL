@@ -13,8 +13,17 @@
 # REST_PATH is equivalent of ROOTSYS for ROOT (REST installation directory)
 # REST_PATH should be defined as environment variable via "thisREST.sh" script
 # If not found add this script to your .bashrc
-find_program(REST_CONFIG_EXECUTABLE rest-config
-        PATHS ${REST_PATH}/bin $ENV{REST_PATH}/bin)
+IF (NOT DEFINED REST_PATH)
+    message(STATUS "REST_PATH not defined in CMake (-DREST_PATH=your_REST_PATH not used). Using environment variable REST_PATH: ${REST_PATH}")
+    set(REST_PATH $ENV{REST_PATH})
+else()
+    message(STATUS "REST_PATH: ${REST_PATH} defined in CMake (-DREST_PATH=your_REST_PATH was used)")
+ENDIF ()
+
+#find_program(REST_CONFIG_EXECUTABLE rest-config PATHS ${REST_PATH}/bin)
+find_program(REST_CONFIG_EXECUTABLE rest-config PATHS ${REST_PATH}/bin NO_SYSTEM_ENVIRONMENT_PATH)
+
+message(STATUS "REST_CONFIG_EXECUTABLE: ${REST_CONFIG_EXECUTABLE}")
 
 if (NOT REST_CONFIG_EXECUTABLE)
     set(REST_FOUND FALSE)
@@ -39,9 +48,6 @@ else ()
 
     # should be implemented in rest-config not manually
     set(REST_BIN_DIR ${REST_PATH}/bin)
-    IF (NOT DEFINED REST_PATH)
-        set(REST_PATH $ENV{REST_PATH})
-    ENDIF ()
 
     set(REST_LIBRARY_DIR ${REST_PATH}/lib)
     set(REST_INCLUDE_DIR ${REST_INCLUDE_DIRS})
