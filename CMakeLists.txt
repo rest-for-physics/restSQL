@@ -1,32 +1,30 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.7)
+project(restSQL)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(${PROJECT_SOURCE_DIR}/inc)
-
+# necessary to use the scripts in "cmake" folder
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-# REST_PATH
-IF (NOT DEFINED REST_PATH)
-    IF (DEFINED ENV{REST_PATH})
-        set(REST_PATH $ENV{REST_PATH})
-    ELSE ()
-        message(FATAL_ERROR "ERROR ::: REST_PATH must be defined as an environment variable and point to REST install directory")
-        return()
-    ENDIF ()
-ENDIF ()
-set(CMAKE_INSTALL_PREFIX ${REST_PATH})
-message(STATUS "Using REST PATH: " ${REST_PATH})
+#include 'inc' and 'src' directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# ROOT
+#ROOT
+set(ROOT_FIND_REQUIRED TRUE)
 include(FindRoot)
-
-set(lnklib -L${REST_PATH}/lib/ -lRestTools -lRestCore -lRestEvents -lRestMetadata ${ROOT_LIBRARIES} -lboost_system -lboost_program_options -lboost_filesystem -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
-
+message(STATUS "ROOT_LIBRARIES: ${ROOT_LIBRARIES}")
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${REST_PATH}/include)
 
+#REST
+set(REST_FIND_REQUIRED TRUE)
+include(FindRest)
+message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
+include_directories(${REST_INCLUDE_DIRS})
 
-add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
+set(lnklib ${ROOT_LIBRARIES} ${REST_LIBRARIES})
+#set(lnklib ${ROOT_LIBRARIES})
+
+#add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
+add_executable(restSQL restSQL.cpp)
 
 target_link_libraries(restSQL ${lnklib})
