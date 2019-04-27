@@ -21,10 +21,11 @@ include(FindRest)
 message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 include_directories(${REST_INCLUDE_DIRS})
 
-set(lnklib ${ROOT_LIBRARIES} ${REST_LIBRARIES})
+set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES} -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
 #set(lnklib ${ROOT_LIBRARIES})
 
 #add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
 add_executable(restSQL restSQL.cpp)
 
+message(STATUS "libraries to link: ${lnklib}")
 target_link_libraries(restSQL ${lnklib})
