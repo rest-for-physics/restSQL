@@ -12,17 +12,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/
 #ROOT
 set(ROOT_FIND_REQUIRED TRUE)
 include(FindRoot)
-message(STATUS "ROOT_LIBRARIES: ${ROOT_LIBRARIES}")
+message(STATUS "ROOT_INCLUDE_DIRS: ${ROOT_INCLUDE_DIRS}")
 include_directories(${ROOT_INCLUDE_DIRS})
+message(STATUS "ROOT_LIBRARIES: ${ROOT_LIBRARIES}")
 
 #REST
 set(REST_FIND_REQUIRED TRUE)
 include(FindRest)
-message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
+message(STATUS "REST_INCLUDE_DIRS: ${REST_INCLUDE_DIRS}")
 include_directories(${REST_INCLUDE_DIRS})
+message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 
 set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES} -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
-#set(lnklib ${ROOT_LIBRARIES})
 
 #add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
 add_executable(restSQL restSQL.cpp)
