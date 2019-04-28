@@ -55,17 +55,10 @@ int main(int argc, char *argv[]) {
 
     TFile *f = new TFile((TString) input_root_file);
 
-    for (const auto &obj : *f->GetListOfKeys()) {
-        TKey *key = (TKey *) obj;
-        string key_class_name = key->GetClassName();
+    TRestSQL *rest_sql = new TRestSQL();
+    TRestMetadata *metadata = rest_sql->GetMetadataClass("TRestG4Metadata", f);
 
-        if (key_class_name == "TRestG4Metadata") {
-            TRestMetadata *key_metadata = (TRestMetadata *) f->Get(key->GetName());
-            assert(key_metadata->InheritsFrom("TRestMetadata"));
-            cout << "REST version used: " << key_metadata->GetVersion() << std::endl;
-        }
-        cout << key_class_name << " - " << key->GetName() << std::endl;
-    }
+    cout << "REST version used: " << metadata->GetVersion() << std::endl;
 
     f->Close();
 

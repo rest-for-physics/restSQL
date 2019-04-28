@@ -5,15 +5,12 @@
 #ifndef RESTSQL_TRESTSQL_H
 #define RESTSQL_TRESTSQL_H
 
-#include <TFile.h>
+#include <TRestRun.h>
 
-#include <TRestDetectorSetup.h>
-#include <TRestG4Metadata.h>
-#include <TRestMetadata.h>
-
-class TRestSQL {
+class TRestSQL : public TRestRun {
+private:
+protected:
 public:
-  TRestMetadata *GetTRestG4MetadataFromFile(TFile *);
 };
 
 #endif // RESTSQL_TRESTSQL_H
