@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
     ProcessArguments(argc, argv);
 
-    TRestTools::LoadRESTLibrary();
+    TRestTools::LoadRESTLibrary(true);
 
     TFile *f = new TFile((TString) input_root_file);
 
