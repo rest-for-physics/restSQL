@@ -23,7 +23,7 @@ message(STATUS "REST_INCLUDE_DIRS: ${REST_INCLUDE_DIRS}")
 include_directories(${REST_INCLUDE_DIRS})
 message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 
-set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES} -lGui -lEve -lRGL -lGeom -lGdml -lMinuit)
+set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES})
 
 #add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
 add_executable(restSQL restSQL.cpp)
