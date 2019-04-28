@@ -27,8 +27,7 @@ message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 
 set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES})
 
-#add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
-add_executable(restSQL restSQL.cpp)
+add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
 
 message(STATUS "libraries to link: ${lnklib}")
 target_link_libraries(restSQL ${lnklib})
