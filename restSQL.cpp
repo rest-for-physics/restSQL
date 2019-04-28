@@ -3,7 +3,7 @@
 #include <TFile.h>
 //#include <TKey.h>
 //#include <TRestG4Metadata.h>
-//#include <TRestMetadata.h>
+#include <TRestMetadata.h>
 
 #include <iostream>
 
