@@ -2,5 +2,6 @@
 .idea
 # local build
 build
+*-build-*
 #root files for testing
 *.root
