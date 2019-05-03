@@ -16,7 +16,6 @@ void PrintHelp() {
                "--help:                  Print this help message\n";
   exit(1);
 }
-
 void ProcessArguments(int argc, char** argv) {
   const char* const short_opts = "f:h:d";
   const option long_opts[] = {{"file", required_argument, nullptr, 'f'},
@@ -84,15 +83,9 @@ int main(int argc, char* argv[]) {
   rest_sql->OpenInputFile(input_root_file);
 
   // rest_sql->PrintAllMetadata();
-  rest_sql->PrintInfo();
+  // rest_sql->PrintInfo();
 
-  TRestMetadata* metadata = rest_sql->GetMetadataClass("TRestProcessRunner");
-
-  if (metadata == nullptr) {
-    cout << "NULL METADATA!" << std::endl;
-  } else {
-    metadata->Print();
-  }
+  TRestGas* gas = rest_sql->GetRestGas();
 
   return 0;
 }

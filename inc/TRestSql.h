@@ -7,6 +7,7 @@
 
 #include <unordered_map>
 
+#include <TRestGas.h>
 #include <TRestRun.h>
 
 class TRestSQL : public TRestRun {
@@ -19,6 +20,14 @@ class TRestSQL : public TRestRun {
  public:
   void PrintMetadataMap();
 
+  TRestGas* GetRestGas() {
+    SetMetadataMap();
+    PrintMetadataMap();
+
+    TRestGas* gas = (TRestGas*)metadata_map["TRestGas"];
+    cout << "Gas Temperature: " << gas->GetTemperature() << std::endl;
+    return gas;
+  }
 };
 
 #endif  // RESTSQL_TRESTSQL_H
