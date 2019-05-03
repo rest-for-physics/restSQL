@@ -20,6 +20,13 @@ class TRestSQL : public TRestRun {
  protected:
  public:
   void PrintMetadataMap();
+  void ReadRestRunFile(string filename, bool print_metadata_map_keys = false) {
+    OpenInputFile((TString)filename);
+    SetMetadataMap();
+    if (print_metadata_map_keys) {
+      PrintMetadataMap();
+    }
+  }
 
   TRestGas* GetRestGas() {
     SetMetadataMap();

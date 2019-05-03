@@ -23,8 +23,6 @@ void TRestSQL::SetMetadataMap() {
 }
 
 void TRestSQL::PrintMetadataMap() {
-  cout << "metadata_map has " << metadata_map.size() << " elements"
-       << std::endl;
   for (const auto& pair : metadata_map) {
     string class_name = pair.first;
     string object_name = pair.second->GetName();

@@ -80,12 +80,7 @@ int main(int argc, char* argv[]) {
 
   TRestSQL* rest_sql = new TRestSQL();
 
-  rest_sql->OpenInputFile(input_root_file);
-
-  // rest_sql->PrintAllMetadata();
-  // rest_sql->PrintInfo();
-
-  TRestGas* gas = rest_sql->GetRestGas();
+  rest_sql->ReadRestRunFile(input_root_file, true);
 
   return 0;
 }
