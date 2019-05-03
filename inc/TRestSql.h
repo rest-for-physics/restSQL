@@ -8,9 +8,9 @@
 #include <TRestRun.h>
 
 class TRestSQL : public TRestRun {
-private:
-protected:
-public:
+ private:
+ protected:
+ public:
 };
 
-#endif // RESTSQL_TRESTSQL_H
+#endif  // RESTSQL_TRESTSQL_H

@@ -4,9 +4,6 @@
 
 #include "TRestSql.h"
 
-#include <TFile.h>
-#include <TKey.h>
-#include <TRestG4Metadata.h>
 #include <TRestMetadata.h>
 
 #include <getopt.h>
@@ -20,8 +17,8 @@ void PrintHelp() {
   exit(1);
 }
 
-void ProcessArguments(int argc, char **argv) {
-  const char *const short_opts = "f:h:d";
+void ProcessArguments(int argc, char** argv) {
+  const char* const short_opts = "f:h:d";
   const option long_opts[] = {{"file", required_argument, nullptr, 'f'},
                               {"directory", required_argument, nullptr, 'd'},
                               {"help", no_argument, nullptr, 'h'},
@@ -29,7 +26,7 @@ void ProcessArguments(int argc, char **argv) {
   // used to check that we called the required arguments
   std::set<char> used_argument_flags;
   const std::set<char> required_arguments_configurations[] = {
-      {'f'}, // file
+      {'f'},  // file
   };
 
   while (true) {
@@ -44,20 +41,20 @@ void ProcessArguments(int argc, char **argv) {
     }
 
     switch (opt) {
-    case 'f':
-      input_root_file = std::string(optarg);
-      std::cout << "reading from root file: " << input_root_file << std::endl;
-      break;
-    case 'd':
-      // TODO: implement reading all files in directory
-      break;
-    case 'h':
-      PrintHelp();
-      break;
-    case '?':
-    default:
-      PrintHelp();
-      break;
+      case 'f':
+        input_root_file = std::string(optarg);
+        std::cout << "reading from root file: " << input_root_file << std::endl;
+        break;
+      case 'd':
+        // TODO: implement reading all files in directory
+        break;
+      case 'h':
+        PrintHelp();
+        break;
+      case '?':
+      default:
+        PrintHelp();
+        break;
     }
   }
   // verify that we called all the required arguments and finish processing
@@ -77,20 +74,25 @@ void ProcessArguments(int argc, char **argv) {
   PrintHelp();
 }
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char* argv[]) {
   ProcessArguments(argc, argv);
 
   TRestTools::LoadRESTLibrary(true);
 
-  TFile *f = new TFile((TString)input_root_file);
+  TRestSQL* rest_sql = new TRestSQL();
 
-  TRestSQL *rest_sql = new TRestSQL();
-  TRestMetadata *metadata = rest_sql->GetMetadataClass("TRestG4Metadata", f);
+  rest_sql->OpenInputFile(input_root_file);
 
-  cout << "REST version used: " << metadata->GetVersion() << std::endl;
+  // rest_sql->PrintAllMetadata();
+  rest_sql->PrintInfo();
 
-  f->Close();
+  TRestMetadata* metadata = rest_sql->GetMetadataClass("TRestProcessRunner");
+
+  if (metadata == nullptr) {
+    cout << "NULL METADATA!" << std::endl;
+  } else {
+    metadata->Print();
+  }
 
   return 0;
 }
