@@ -10,10 +10,11 @@
 #include <TRestGas.h>
 #include <TRestRun.h>
 
+#include "sha1.h"
+
 class TRestSQL : public TRestRun {
  private:
   std::unordered_map<string, TRestMetadata*> metadata_map;
-
   void SetMetadataMap();
 
  protected:
@@ -26,6 +27,7 @@ class TRestSQL : public TRestRun {
 
     TRestGas* gas = (TRestGas*)metadata_map["TRestGas"];
     cout << "Gas Temperature: " << gas->GetTemperature() << std::endl;
+    cout << sha1("patata") << std::endl;
     return gas;
   }
 };

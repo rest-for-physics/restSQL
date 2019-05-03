@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 # include 'inc' and 'src' directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils/inc ${CMAKE_CURRENT_SOURCE_DIR}/utils/src)
 
 # ROOT
 set(ROOT_FIND_REQUIRED TRUE)
@@ -27,7 +28,7 @@ message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 
 set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES})
 
-add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx)
+add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx utils/inc/sha1.h utils/src/sha1.cxx)
 
 message(STATUS "libraries to link: ${lnklib}")
 target_link_libraries(restSQL ${lnklib})

@@ -4,8 +4,7 @@
 
 #include "TRestSql.h"
 
-#define TOSTRING(x) #x
-
+// SetMetadataMap only needs to be called once per file read
 void TRestSQL::SetMetadataMap() {
   metadata_map.clear();
 
