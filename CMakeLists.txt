@@ -26,7 +26,19 @@ message(STATUS "REST_INCLUDE_DIRS: ${REST_INCLUDE_DIRS}")
 include_directories(${REST_INCLUDE_DIRS})
 message(STATUS "REST_LIBRARIES: ${REST_LIBRARIES}")
 
-set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES})
+# database libraries
+SET(LD_DEBUG ALL)
+set(DATABASE_LIBRARIES "")
+if (SQLITE)
+    # TODO: sqlite/lib should be added to LD_LIBRARY_PATH so -L option is not needed
+    set(SQLITE_PATH /home/lobis/apps/sqlite/)
+    set(DATABASE_LIBRARIES "${DATABASE_LIBRARIES}-L${SQLITE_PATH}/lib -lsqlite3")
+    include_directories(${SQLITE_PATH}/include)
+endif()
+# TODO: add postgresql as option
+message(STATUS "DATABASE LIBRARIES: ${DATABASE_LIBRARIES}")
+
+set(lnklib ${REST_LIBRARIES} ${ROOT_LIBRARIES} ${DATABASE_LIBRARIES})
 
 add_executable(restSQL restSQL.cpp inc/TRestSql.h src/TRestSql.cxx utils/inc/sha1.h utils/src/sha1.cxx)
 
