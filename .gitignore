@@ -3,5 +3,7 @@
 # local build
 build
 *-build-*
-#root files for testing
+# root files for testing
 *.root
+# database files (sqlite)
+*.db
