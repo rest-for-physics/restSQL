@@ -99,5 +99,6 @@ int main(int argc, char* argv[]) {
     rest_sql->ReadRestRunFile(input_root_file, true);
 
     rest_sql->CreateTables();
+    rest_sql->InsertIntoFiles(true);
     return 0;
 }

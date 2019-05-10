@@ -57,6 +57,7 @@ class TRestSQL : public TRestRun {
     void ExecSQL(vector<string>);
     void ExecSQL(string);
     void CreateTables() { ExecSQL(sql_create_tables); }
+    void InsertIntoFiles(bool overwrite = false);
 
     TRestGas* GetRestGas() {
         SetMetadataMap();

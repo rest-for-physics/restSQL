@@ -72,7 +72,19 @@ void TRestSQL::ExecSQL(vector<string> sql_statements) {
     sqlite3_close(db);
 }
 
-void TRestSQL::ExecSQL(string sql){
+void TRestSQL::ExecSQL(string sql) {
     vector<string> sql_statements = {sql};
     ExecSQL(sql_statements);
+}
+
+string quote_sql(const string& s) { return string("'") + s + string("'"); }
+string quote_sql(const TString& s) { return quote_sql((string)s); }
+
+void TRestSQL::InsertIntoFiles(bool overwrite) {
+    string operation = "INSERT";
+    if (overwrite) operation = "REPLACE";
+
+    string sql = operation + " INTO FILES (ID, NAME, REST_VERSION) VALUES (" + quote_sql(input_file_hash) +
+                 "," + quote_sql(fInputFileName) + "," + quote_sql(GetVersion()) + ");";
+    ExecSQL(sql);
 }
