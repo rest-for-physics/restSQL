@@ -18,7 +18,7 @@ void PrintHelp() {
                  "inside this directory\n"
                  "--sqlite_file:           [OPTIONAL] sqlite database file to "
                  "use, if not specified it will use default file, if it doesn't "
-                 "exists it will try to create one"
+                 "exists it will try to create one\n"
                  "--help:                  Print this help message\n";
     exit(1);
 }
