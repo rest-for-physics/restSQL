@@ -18,7 +18,14 @@ class TRestSQL : public TRestRun {
    private:
     std::unordered_map<string, TRestMetadata*> metadata_map;
     string input_file_hash;
+    // sql
     string sqlite_file;
+    string sql_create_tables =
+        "CREATE TABLE FILES("
+        "ID             INT     PRIMARY KEY NOT NULL,"
+        "NAME           TEXT                NOT NULL,"
+        "REST_VERSION   CHAR(15)"
+        ")";
 
     void SetMetadataMap();
     string SetInputFileHash() {
@@ -34,8 +41,8 @@ class TRestSQL : public TRestRun {
    protected:
    public:
     void SetSqliteFile(string provided_sqlite_file) { sqlite_file = provided_sqlite_file; }
-    void CreateDatabase();
-
+    void ExecSQL(string);
+    void CreateTables() { ExecSQL(sql_create_tables); }
     void PrintMetadataMap();
     // TODO: write ReadRestRunFile in src instead
     void ReadRestRunFile(string filename, bool print_metadata_map_keys = false) {

@@ -39,7 +39,7 @@ static int callback(void* NotUsed, int argc, char** argv, char** azColName) {
     return 0;
 }
 
-void TRestSQL::CreateDatabase() {
+void TRestSQL::ExecSQL(string sql_statement) {
     string sqlite_file_to_use = sqlite_file;
     if (sqlite_file_to_use == "") {
         sqlite_file_to_use = "default.db";
@@ -47,7 +47,6 @@ void TRestSQL::CreateDatabase() {
     sqlite3* db;
     char* zErrMsg = nullptr;
     int rc;
-    char* sql;
 
     // open database
     rc = sqlite3_open(sqlite_file_to_use.c_str(), &db);
@@ -59,21 +58,14 @@ void TRestSQL::CreateDatabase() {
         fprintf(stdout, "Opened database successfully\n");
     }
 
-    sql =
-        "CREATE TABLE FILES("
-        "ID             INT     PRIMARY KEY NOT NULL,"
-        "NAME           TEXT                NOT NULL,"
-        "REST_VERSION   CHAR(15)"
-        ")";
-
     // execute SQL
-    rc = sqlite3_exec(db, sql, callback, nullptr, &zErrMsg);
+    rc = sqlite3_exec(db, sql_statement.c_str(), callback, nullptr, &zErrMsg);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     } else {
-        fprintf(stdout, "Table created successfully\n");
+        fprintf(stdout, "Statement executed successfully\n");
     }
     sqlite3_close(db);
 }

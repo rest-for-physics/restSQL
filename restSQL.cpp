@@ -97,6 +97,7 @@ int main(int argc, char* argv[]) {
     }
 
     rest_sql->ReadRestRunFile(input_root_file, true);
-    rest_sql->CreateDatabase();
+
+    rest_sql->CreateTables();
     return 0;
 }
