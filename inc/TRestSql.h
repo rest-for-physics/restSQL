@@ -40,9 +40,6 @@ class TRestSQL : public TRestRun {
 
    protected:
    public:
-    void SetSqliteFile(string provided_sqlite_file) { sqlite_file = provided_sqlite_file; }
-    void ExecSQL(string);
-    void CreateTables() { ExecSQL(sql_create_tables); }
     void PrintMetadataMap();
     // TODO: write ReadRestRunFile in src instead
     void ReadRestRunFile(string filename, bool print_metadata_map_keys = false) {
@@ -54,6 +51,12 @@ class TRestSQL : public TRestRun {
         // we compute the hash afterwards to make sure file is exists and readable
         SetInputFileHash();
     }
+
+    // SQL
+    void SetSqliteFile(string provided_sqlite_file) { sqlite_file = provided_sqlite_file; }
+    void ExecSQL(vector<string>);
+    void ExecSQL(string);
+    void CreateTables() { ExecSQL(sql_create_tables); }
 
     TRestGas* GetRestGas() {
         SetMetadataMap();

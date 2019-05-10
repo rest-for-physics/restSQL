@@ -39,7 +39,7 @@ static int callback(void* NotUsed, int argc, char** argv, char** azColName) {
     return 0;
 }
 
-void TRestSQL::ExecSQL(string sql_statement) {
+void TRestSQL::ExecSQL(vector<string> sql_statements) {
     string sqlite_file_to_use = sqlite_file;
     if (sqlite_file_to_use == "") {
         sqlite_file_to_use = "default.db";
@@ -59,13 +59,20 @@ void TRestSQL::ExecSQL(string sql_statement) {
     }
 
     // execute SQL
-    rc = sqlite3_exec(db, sql_statement.c_str(), callback, nullptr, &zErrMsg);
-
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    } else {
-        fprintf(stdout, "Statement executed successfully\n");
+    for (auto& sql : sql_statements) {
+        rc = sqlite3_exec(db, sql.c_str(), callback, nullptr, &zErrMsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error: %s\n", zErrMsg);
+            sqlite3_free(zErrMsg);
+        } else {
+            fprintf(stdout, "Statement executed successfully\n");
+        }
     }
+
     sqlite3_close(db);
+}
+
+void TRestSQL::ExecSQL(string sql){
+    vector<string> sql_statements = {sql};
+    ExecSQL(sql_statements);
 }
