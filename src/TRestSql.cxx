@@ -22,6 +22,11 @@ void TRestSQL::SetMetadataMap() {
     }
 }
 
+void TRestSQL::SetInputFileHash() {
+    auto unique_id = fInputFile->GetUUID();
+    input_file_hash = unique_id.AsString();
+}
+
 void TRestSQL::PrintMetadataMap() {
     for (const auto& pair : metadata_map) {
         string class_name = pair.first;

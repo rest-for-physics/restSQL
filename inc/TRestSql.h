@@ -28,15 +28,7 @@ class TRestSQL : public TRestRun {
         ")";
 
     void SetMetadataMap();
-    string SetInputFileHash() {
-        string input_file_as_string;
-        // TODO: implement file hash, if possible without reading the file again
-        // temporary BAD implementation
-        // we should be able to convert the file contents in bytes to a string and
-        // compute hash
-        input_file_as_string = fInputFileName;
-        input_file_hash = sha1(input_file_as_string);
-    }
+    void SetInputFileHash();
 
    protected:
    public:
