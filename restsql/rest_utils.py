@@ -1,5 +1,7 @@
 import os
 import io
+import time
+import pwd
 
 import ROOT
 
@@ -63,23 +65,36 @@ def load_rest_libs(rest_libs_to_load=None):
         print("REST library ({}) loaded successfully with status: {}.".format(lib, load_status))
 
 
-def get_class_map(root_file):
+def get_file_info(root_file):
     """
     Return dictionary with metadata name : object
     """
     class_map = {}
+    class_names = {}
 
     f = ROOT.TFile(root_file, "READ")
     for key in f.GetListOfKeys():
         name = key.GetName()
+        class_name = key.GetClassName()
         metadata = f.Get(name)
         if not metadata.InheritsFrom("TRestMetadata"):
             continue
         class_map[name] = metadata
+        class_names[name] = class_name
 
+    unique_id = f.GetUUID().AsString()
     f.Close()
 
-    return class_map
+    st = os.stat(root_file)
+    file_owner = pwd.getpwuid(st.st_uid).pw_name
+    file_size_in_mb = st.st_size * 1 / 1E6
+    last_modified_date = time.ctime(os.path.getmtime(root_file))
+    created_date = time.ctime(os.path.getctime(root_file))
+    now = time.ctime(time.time())
+
+    file_info = {"name": root_file, "id": unique_id, "owner": file_owner, "created date": created_date,
+                 "last modified date": last_modified_date, "size (MB)": file_size_in_mb, "insert date": now}
+    return class_map, class_names, file_info
 
 
 def get_class_data(metadata, only_starts_with_f=True, ignore_pointers=True):
@@ -98,7 +113,6 @@ def get_class_data(metadata, only_starts_with_f=True, ignore_pointers=True):
             pos = line.find(" " + split[1]) + 1
             first_column_length_limit = min(first_column_length_limit, pos)
     # warning: there can be spaces in the "value" column, that is why need third column start
-    second_column_length_limit = len(dump)
     tmp = []
     for line in dump.split("\n")[1:]:
         line = line[first_column_length_limit:]
@@ -134,4 +148,6 @@ def get_class_data(metadata, only_starts_with_f=True, ignore_pointers=True):
     return data
 
 
+print("LOADING REST LIBRARIES: STARTED")
 load_rest_libs()
+print("LOADING REST LIBRARIES: FINISHED")
