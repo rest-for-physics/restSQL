@@ -17,7 +17,7 @@ def create_files_table(conn):
     sql = """
 CREATE TABLE IF NOT EXISTS FILES (
 id text PRIMARY KEY,
-name text NOT NULL UNIQUE,
+name text NOT NULL,
 owner text,
 'created date' date,
 'last modified date' date,
@@ -61,7 +61,7 @@ id integer PRIMARY KEY,
 file_id text NOT NULL,
 name text,
 {fields},
-FOREIGN KEY (file_id) REFERENCES files (id)
+FOREIGN KEY (file_id) REFERENCES files (id) ON DELETE CASCADE
 );
 """
     try:
@@ -92,6 +92,7 @@ INSERT INTO {class_name} (file_id, name, {fields}) VALUES(
 
     return cur.lastrowid
 
+
 def get_files(conn):
     cur = conn.cursor()
     cur.execute("SELECT name FROM FILES")
@@ -99,3 +100,16 @@ def get_files(conn):
     rows = cur.fetchall()
 
     return [row[0] for row in rows]
+
+
+def delete_files(conn, files):
+    if len(files) == 0:
+        return
+
+    files_to_delete = ",".join(["'" + file + "'" for file in files])
+    cur = conn.cursor()
+    cur.execute(f"""
+    PRAGMA foreign_keys = ON;
+    DELETE FROM FILES WHERE name in ({files_to_delete});
+    """)
+    print(f"deleted: {files_to_delete}")
