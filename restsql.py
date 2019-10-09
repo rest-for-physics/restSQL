@@ -1,9 +1,8 @@
 import os
 import time
+import argparse
 
 from restsql import rest_utils, database
-
-root_file = "/home/lobis/gitlab/IAXOD0-REST/analysis_data/cosmic_neutrons/run_cosmic_neutrons_16-September-2019-17h29m47s/analysis_cosmic_neutrons_N100000000_0.root"
 
 db_file = "/tmp/restsql.db"
 
@@ -59,8 +58,17 @@ def clean_files():
 
 
 if __name__ == '__main__':
-    path = "/tmp/restsql"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("root_files", help="root files path or single root file")
+    parser.add_argument("-d", "--database", help="database path")
+    args = parser.parse_args()
 
+    if args.database:
+        db_file = os.path.abspath(args.database)
+
+    path = os.path.abspath(args.root_files)
+
+    rest_utils.load_rest_libs()
 
     while 1:
         files_processed = 0
@@ -77,9 +85,7 @@ if __name__ == '__main__':
                 continue
             print(f"{i + 1}/{len(files)} - {file}")
             process_file(file)
-            print("patata")
             files_processed += 1
 
         print(f"processed {files_processed} files")
         time.sleep(5)
-        print("patataaaa")

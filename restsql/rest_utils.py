@@ -147,7 +147,3 @@ def get_class_data(metadata, only_starts_with_f=True, ignore_pointers=True):
 
     return data
 
-
-print("LOADING REST LIBRARIES: STARTED")
-load_rest_libs()
-print("LOADING REST LIBRARIES: FINISHED")
