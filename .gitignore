@@ -8,4 +8,4 @@ build
 # database files (sqlite)
 *.db
 # python
-__pychache__
+restsql/__pychache__/*
