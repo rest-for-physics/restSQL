@@ -1,6 +1,7 @@
 import os
 import io
 import time
+from datetime import datetime
 import pwd
 
 import ROOT
@@ -88,9 +89,9 @@ def get_file_info(root_file):
     st = os.stat(root_file)
     file_owner = pwd.getpwuid(st.st_uid).pw_name
     file_size_in_mb = st.st_size * 1 / 1E6
-    last_modified_date = time.ctime(os.path.getmtime(root_file))
-    created_date = time.ctime(os.path.getctime(root_file))
-    now = time.ctime(time.time())
+    last_modified_date = datetime.utcfromtimestamp(os.path.getmtime(root_file)).strftime('%Y-%m-%d %H:%M:%S')
+    created_date = datetime.utcfromtimestamp(os.path.getctime(root_file)).strftime('%Y-%m-%d %H:%M:%S')
+    now = datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
     file_info = {"name": root_file, "id": unique_id, "owner": file_owner, "created date": created_date,
                  "last modified date": last_modified_date, "size (MB)": file_size_in_mb, "insert date": now}

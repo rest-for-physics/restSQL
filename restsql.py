@@ -1,91 +1,80 @@
+#!~/anaconda3/bin/python
+
 import os
 import time
 import argparse
+import datetime
 
-from restsql import rest_utils, database
+from restsql import database
+from restsql import rest_utils
 
-db_file = "/tmp/restsql.db"
 
+def myprint(s):
+    print(f"{datetime.datetime.now().strftime('%d.%b %Y %H:%M:%S')} - {s}", flush=True)
 
+def get_root_files(path):
+    myprint(f"scanning {path} for root files")
+    root_files = []
+    if os.path.isdir(path):
+        for root, _, files in os.walk(path):
+            for file in files:
+                if '.root' in file:
+                    root_files.append(os.path.abspath(os.path.join(root, file)))
+    elif os.path.isfile(path):
+        root_files = [os.path.abspath(path)]
+    
+    myprint(f"there are {len(root_files)} in {path}")
+    return root_files
+
+# process a root file, extracting metadata and inserting into database
 def process_file(root_file):
     class_map, class_names, file_info = rest_utils.get_file_info(root_file)
 
-    conn = database.create_connection(db_file)
-    with conn:
-        inserted = database.insert_files_data(conn, file_info)
-        if not inserted:
-            # row already inserted
-            return
+    database.insert_files_data(file_info)
 
-        for name, metadata in class_map.items():
-            data = rest_utils.get_class_data(metadata)
-            database.insert_metadata(conn, class_names[name], name, file_info["id"], data)
+    for name, metadata in class_map.items():
+        data = rest_utils.get_class_data(metadata)
+        database.insert_metadata(class_names[name], name, file_info["id"], file_info["name"], data)
 
-
-def get_files(path):
-    root_files = []
-    for root, _, files in os.walk(path):
-        for file in files:
-            if '.root' in file:
-                root_files.append(os.path.abspath(os.path.join(root, file)))
-    return root_files
-
-
-def find_deleted_files():
-    conn = database.create_connection(db_file)
-    with conn:
-        files = database.get_files(conn)
+def remove_unavailable_entries():
+    database_files = database.get_files()
 
     deleted_files = []
-    for file in files:
+    for file in database_files:
         if not os.path.isfile(file):
             deleted_files.append(file)
 
-    return deleted_files
+    if deleted_files:
+        print(f"found {len(deleted_files)} deleted/moved files, removing them from database - {deleted_files}")
+        database.delete_files(deleted_files)
 
-
-def get_database_files():
-    conn = database.create_connection(db_file)
-    with conn:
-        return database.get_files(conn)
-
-
-def clean_files():
-    deleted_files = find_deleted_files()
-    conn = database.create_connection(db_file)
-    with conn:
-        database.delete_files(conn, deleted_files)
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("root_files", help="root files path or single root file")
-    parser.add_argument("-d", "--database", help="database path")
+    parser.add_argument("root_files_dir_or_single_file", help="root files path or single root file")
     args = parser.parse_args()
+    path = os.path.abspath(args.root_files_dir_or_single_file)
 
-    if args.database:
-        db_file = os.path.abspath(args.database)
-
-    path = os.path.abspath(args.root_files)
-
+    if os.path.isdir(path):
+        myprint(f"directory to scan recursively: {path}")
+    if os.path.isfile(path):
+        myprint(f"working on file: {path}")
+    
+    # load REST libraries
     rest_utils.load_rest_libs()
+    # create FILES table
+    # database.clear_database()
+    database.create_files_table()
 
     while 1:
-        files_processed = 0
-        files = get_files(path)
-        try:
-            clean_files()
-            database_files = get_database_files()
-        except Exception as e:
-            # database may not exist here
-            database_files = []
-        for i, file in enumerate(files):
+        root_files = get_root_files(path)
+        for file in root_files:
+            #remove_unavailable_entries()
+            database_files = database.get_files()
+            if file not in database_files:
+                process_file(file)
+            else:
+                pass
+                #myprint(f"{file} already in database, skipping...")
 
-            if file in database_files:
-                continue
-            print(f"{i + 1}/{len(files)} - {file}")
-            process_file(file)
-            files_processed += 1
-
-        print(f"processed {files_processed} files")
+        myprint("tick...")
         time.sleep(5)

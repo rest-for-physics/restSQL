@@ -7,3 +7,5 @@ build
 *.root
 # database files (sqlite)
 *.db
+# python
+__pychache__
