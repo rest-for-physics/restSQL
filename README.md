@@ -17,17 +17,17 @@ Sample of metadata objects contained in a file (simulation run + analysis):
 ```
 TRestPhysicsLists - default
 TRestGas - Argon-Isobutane 2Pct 10-10E3Vcm
-TRestReadout - TREXDM_v1
+TRestDetectorReadout - TREXDM_v1
 TRestRun - Background Model
 TRestElectronDiffusionProcess - Ar-electronDiffusion-1kVcm-10atm
 TRestHitsToSignalProcess - hitsToSignal-Template
-TRestFastHitsToTrackProcess - fastHitsToTrack-Template
+TRestDetectorHitsToTrackFastProcess - fastHitsToTrack-Template
 TRestGeant4AnalysisProcess - g4Ana
 TRestTriggerAnalysisProcess - trigger
 TRestHitsAnalysisProcess - hitsAna
-TRestG4toHitsProcess - g4ToHits
+TRestGeant4ToHitsProcess - g4ToHits
 TRestProcessRunner - TemplateEventProcess
-TRestG4Metadata - restG4 Simulation run
+TRestGeant4Metadata - restG4 Simulation run
 TRestTrackAnalysisProcess - tckAna
 TRestTrackReconnectionProcess - trackReconnection-Template
 TRestSignalToHitsProcess - signalToHits
