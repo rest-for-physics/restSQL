@@ -15,20 +15,20 @@ The information contained in each metadata object of the file will also be read 
 Sample of metadata objects contained in a file (simulation run + analysis): 
 
 ```
-TRestPhysicsLists - default
-TRestGas - Argon-Isobutane 2Pct 10-10E3Vcm
+TRestGeant4PhysicsLists - default
+TRestDetectorGas - Argon-Isobutane 2Pct 10-10E3Vcm
 TRestDetectorReadout - TREXDM_v1
 TRestRun - Background Model
-TRestElectronDiffusionProcess - Ar-electronDiffusion-1kVcm-10atm
-TRestHitsToSignalProcess - hitsToSignal-Template
+TRestDetectorElectronDiffusionProcess - Ar-electronDiffusion-1kVcm-10atm
+TRestDetectorHitsToSignalProcess - hitsToSignal-Template
 TRestDetectorHitsToTrackFastProcess - fastHitsToTrack-Template
 TRestGeant4AnalysisProcess - g4Ana
-TRestTriggerAnalysisProcess - trigger
-TRestHitsAnalysisProcess - hitsAna
+TRestDetectorTriggerAnalysisProcess - trigger
+TRestDetectorHitsAnalysisProcess - hitsAna
 TRestGeant4ToHitsProcess - g4ToHits
 TRestProcessRunner - TemplateEventProcess
 TRestGeant4Metadata - restG4 Simulation run
 TRestTrackAnalysisProcess - tckAna
 TRestTrackReconnectionProcess - trackReconnection-Template
-TRestSignalToHitsProcess - signalToHits
+TRestDetectorSignalToHitsProcess - signalToHits
 ```
